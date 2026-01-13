@@ -1,0 +1,12 @@
+{
+  "domain": "rtlamr_ws",
+  "name": "RTLAMR WebSocket",
+  "version": "1.0.0",
+  "documentation": "https://github.com/alex-savin/hassio-integration-rtlamr",
+  "issue_tracker": "https://github.com/alex-savin/hassio-integration-rtlamr/issues",
+  "requirements": ["websockets>=11.0"],
+  "dependencies": [],
+  "codeowners": ["@alex-savin"],
+  "config_flow": true,
+  "iot_class": "local_push"
+}

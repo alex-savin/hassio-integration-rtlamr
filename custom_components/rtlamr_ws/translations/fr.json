@@ -1,0 +1,29 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "RTLAMR WebSocket",
+        "description": "Connectez-vous à l'add-on RTLAMR WebSocket pour recevoir les relevés de compteurs.",
+        "data": {
+          "websocket_url": "URL WebSocket"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Impossible de se connecter à l'add-on. Assurez-vous que l'add-on RTLAMR WebSocket est en cours d'exécution."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Options RTLAMR WebSocket",
+        "data": {
+          "websocket_url": "URL WebSocket"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Impossible de se connecter à l'add-on. Assurez-vous que l'add-on RTLAMR WebSocket est en cours d'exécution."
+    }
+  }
+}
