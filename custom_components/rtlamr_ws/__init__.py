@@ -122,19 +122,44 @@ async def _listen_ws(
         await asyncio.sleep(RECONNECT_DELAY)
 
 
-async def _check_health(ws_url: str) -> bool:
-    """Check if the add-on is reachable via HTTP health endpoint."""
+async def _check_health(
+    ws_url: str, attempts: int = 5, delay: float = 2.0
+) -> bool:
+    """Check if the add-on is reachable via its HTTP health endpoint.
+
+    Retries a few times before giving up so a transient startup race — Home
+    Assistant loading this integration before the add-on's HTTP server is
+    listening — does not surface as a spurious warning. Each failed attempt is
+    logged at debug; the caller decides what to do once all attempts fail.
+    """
     http_url = ws_url.replace("wss://", "https://").replace("ws://", "http://")
     base_url = http_url.rsplit("/", 1)[0]
     health_url = f"{base_url}/health"
 
-    try:
-        async with aiohttp.ClientSession() as session:
-            async with async_timeout.timeout(5):
-                async with session.get(health_url) as resp:
-                    return resp.status == 200
-    except Exception:
-        return False
+    async with aiohttp.ClientSession() as session:
+        for attempt in range(1, attempts + 1):
+            try:
+                async with async_timeout.timeout(5):
+                    async with session.get(health_url) as resp:
+                        if resp.status == 200:
+                            return True
+                        _LOGGER.debug(
+                            "Health check %s returned HTTP %s (attempt %d/%d)",
+                            health_url,
+                            resp.status,
+                            attempt,
+                            attempts,
+                        )
+            except Exception as err:  # noqa: BLE001 - probe is best-effort
+                _LOGGER.debug(
+                    "Health check attempt %d/%d failed: %s",
+                    attempt,
+                    attempts,
+                    err,
+                )
+            if attempt < attempts:
+                await asyncio.sleep(delay)
+    return False
 
 
 async def async_setup(hass: HomeAssistant, config: dict) -> bool:
