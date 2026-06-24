@@ -122,9 +122,7 @@ async def _listen_ws(
         await asyncio.sleep(RECONNECT_DELAY)
 
 
-async def _check_health(
-    ws_url: str, attempts: int = 5, delay: float = 2.0
-) -> bool:
+async def _check_health(ws_url: str, attempts: int = 5, delay: float = 2.0) -> bool:
     """Check if the add-on is reachable via its HTTP health endpoint.
 
     Retries a few times before giving up so a transient startup race — Home
