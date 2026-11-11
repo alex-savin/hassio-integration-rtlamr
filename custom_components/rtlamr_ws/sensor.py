@@ -8,9 +8,10 @@ from typing import Any
 
 import logging
 
-from homeassistant.components.sensor import SensorEntity, RestoreEntity
+from homeassistant.components.sensor import SensorEntity
 from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers.dispatcher import async_dispatcher_connect
+from homeassistant.helpers.restore_state import RestoreEntity
 
 from .const import DOMAIN, signal_new_sensor, signal_update
 
